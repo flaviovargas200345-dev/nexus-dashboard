@@ -3,91 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Aquarium Pro - Dashboard</title>
-    <!-- Librerías Necesarias -->
+    <title>Nexus Aquarium - Dashboard Pro</title>
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script src="https://jsdelivr.net"></script>
     <link href="https://cloudflare.com" rel="stylesheet">
     <style>
-        :root { --bg-dark: #0b0e14; --sidebar-bg: #161b22; --card-bg: #1c2128; --accent: #38bdf8; --text-gray: #8b949e; --text-white: #f0f6fc; --alert-red: #ef4444; }
-        body { background-color: var(--bg-dark); color: var(--text-white); font-family: 'Inter', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 240px; background: var(--sidebar-bg); border-right: 1px solid #30363d; display: flex; flex-direction: column; padding: 20px; }
-        .main-container { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        .header-top { padding: 15px 30px; background: var(--sidebar-bg); border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; }
-        .content-padding { padding: 25px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #30363d; }
-        .val { font-size: 1.5rem; font-weight: bold; margin: 10px 0; color: var(--accent); }
-        .chart-box { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 25px; }
-        #status-text { font-size: 0.8rem; color: #4ade80; }
+        :root { --bg-deep: #07090d; --sidebar-bg: #0f131a; --card-bg: #141a23; --accent-blue: #3b82f6; --text-muted: #8b949e; --alert-red: #ef4444; }
+        body { background-color: var(--bg-deep); color: #f0f6fc; font-family: 'Inter', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar { width: 220px; background: var(--sidebar-bg); padding: 20px; display: flex; flex-direction: column; border-right: 1px solid #1e2530; }
+        .sidebar-logo { display: flex; align-items: center; gap: 10px; font-weight: bold; margin-bottom: 40px; }
+        .nav-link { display: flex; align-items: center; gap: 12px; color: var(--text-muted); text-decoration: none; padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 5px; }
+        .nav-link.active { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        .nav-link:hover { color: white; }
+
+        /* Main */
+        .main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+        .header { background: var(--sidebar-bg); padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e2530; }
+        .content { padding: 20px 40px; }
+
+        /* Banner Alerta */
+        .alert-bar { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--alert-red); color: var(--alert-red); padding: 12px 20px; border-radius: 10px; margin-bottom: 25px; display: none; align-items: center; gap: 15px; font-size: 0.85rem; }
+
+        /* Tarjetas Estilo Nexus */
+        .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 15px; display: flex; flex-direction: column; position: relative; }
+        .stat-card h3 { font-size: 0.65rem; color: var(--text-muted); margin: 0; text-transform: uppercase; }
+        .stat-card .value { font-size: 1.4rem; font-weight: bold; margin: 8px 0; }
+        .stat-card .trend { font-size: 0.75rem; color: #10b981; display: flex; align-items: center; gap: 4px; }
+        .stat-icon { position: absolute; top: 15px; right: 15px; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        /* Gráfica y Panel Lateral */
+        .dashboard-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 20px; }
+        .chart-box { background: var(--card-bg); padding: 25px; border-radius: 20px; }
+        .health-box { background: var(--card-bg); padding: 20px; border-radius: 20px; margin-bottom: 20px; }
+        .service-box { background: #2563eb; padding: 25px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h2 style="color:var(--accent)"><i class="fas fa-cube"></i> Nexus</h2>
-    <div style="color:var(--text-gray); margin-top:20px;">DASHBOARD</div>
+    <div class="sidebar-logo"><i class="fas fa-cube" style="color:#3b82f6"></i> Nexus Aquarium</div>
+    <a href="#" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</a>
+    <a href="#" class="nav-link"><i class="fas fa-bell"></i> Alerts <span style="background:var(--alert-red); color:white; border-radius:50%; width:18px; height:18px; text-align:center; font-size:0.7rem; margin-left:auto">1</span></a>
+    <a href="#" class="nav-link"><i class="fas fa-history"></i> History</a>
+    <a href="#" class="nav-link"><i class="fas fa-file-alt"></i> Reports</a>
+    <a href="#" class="nav-link" style="margin-top:auto"><i class="fas fa-cog"></i> Settings</a>
 </div>
 
-<div class="main-container">
-    <header class="header-top">
-        <div>Reef Tank #1</div>
-        <div id="status-text">● Conectando a la nube...</div>
+<div class="main">
+    <header class="header">
+        <div style="font-size: 0.8rem; background:#1e2530; padding:6px 12px; border-radius:6px;">Reef Tank #1 <i class="fas fa-chevron-down" style="margin-left:8px"></i></div>
+        <div style="display:flex; align-items:center; gap:20px;">
+            <i class="fas fa-search" style="color:var(--text-muted)"></i>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:0.8rem">Nexus Admin</span>
+                <div style="background:var(--accent-blue); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:black">N</div>
+            </div>
+        </div>
     </header>
 
-    <div class="content-padding">
-        <div class="stats-grid">
-            <div class="stat-card"><h3>TEMP</h3><div class="val" id="txt-temp">--°C</div></div>
-            <div class="stat-card"><h3>PH</h3><div class="val" id="txt-ph">--</div></div>
-            <div class="stat-card"><h3>TDS</h3><div class="val" id="txt-tds">-- ppm</div></div>
-            <div class="stat-card"><h3>TURBIDEZ</h3><div class="val">28 NTU</div></div>
-            <div class="stat-card"><h3>OXIGENO</h3><div class="val">7.5 mg/L</div></div>
+    <div class="content">
+        <div class="alert-bar" id="alert-zone">
+            <i class="fas fa-exclamation-triangle"></i> <strong>ALERTA:</strong> Parámetros fuera de rango seguro. Revise el sistema de inmediato.
         </div>
 
-        <div class="chart-box">
-            <h4>Live Parameter Tracking</h4>
-            <canvas id="liveChart" height="100"></canvas>
+        <div class="stats-row">
+            <div class="stat-card">
+                <h3>TEMP</h3><div class="value" id="val-temp">--°C</div><div class="trend"><i class="fas fa-arrow-up"></i> 1.2%</div>
+                <div class="stat-icon" style="background:rgba(59,130,246,0.1); color:#3b82f6"><i class="fas fa-thermometer-half"></i></div>
+            </div>
+            <div class="stat-card">
+                <h3>PH</h3><div class="value" id="val-ph">--</div><div class="trend"><i class="fas fa-arrow-up"></i> 0.3%</div>
+                <div class="stat-icon" style="background:rgba(16,185,129,0.1); color:#10b981"><i class="fas fa-flask"></i></div>
+            </div>
+            <div class="stat-card">
+                <h3>TDS</h3><div class="value" id="val-tds">--</div><div class="trend" style="color:var(--alert-red)"><i class="fas fa-arrow-up"></i> 5.4%</div>
+                <div class="stat-icon" style="background:rgba(168,85,247,0.1); color:#a855f7"><i class="fas fa-vial"></i></div>
+            </div>
+            <div class="stat-card">
+                <h3>TURBIDEZ</h3><div class="value">28 <small style="font-size:0.6rem">NTU</small></div><div class="trend" style="color:var(--text-muted)">Estable</div>
+                <div class="stat-icon" style="background:rgba(251,191,36,0.1); color:#fbbf24"><i class="fas fa-tint"></i></div>
+            </div>
+            <div class="stat-card">
+                <h3>OXIGENO</h3><div class="value">7.5 <small style="font-size:0.6rem">mg/L</small></div><div class="trend"><i class="fas fa-arrow-up"></i> 1.1%</div>
+                <div class="stat-icon" style="background:rgba(59,130,246,0.1); color:#3b82f6"><i class="fas fa-wind"></i></div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="chart-box">
+                <h4 style="margin:0 0 20px 0; color:var(--text-muted); font-size:0.8rem">Live Parameter Tracking</h4>
+                <canvas id="aquariumChart" height="150"></canvas>
+            </div>
+            <div>
+                <div class="health-box">
+                    <h4 style="margin:0 0 15px 0; font-size:0.9rem">System Health <span style="float:right; color:#10b981; font-size:0.6rem">● Online</span></h4>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin:5px 0">WiFi Signal: <span style="color:#10b981">Excellent (98%)</span></p>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin:5px 0">Last Sync: Just now</p>
+                </div>
+                <div class="service-box">
+                    <span style="font-size:0.7rem; opacity:0.8">NEXT SERVICE</span>
+                    <div style="font-size:1.8rem; font-weight:bold">4 Days <small style="font-size:0.7rem; font-weight:normal">REMAINING</small></div>
+                    <p style="font-size:0.7rem; margin:0">Filter Replacement & Skimmer Cleaning</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    // --- CONFIGURACIÓN FIREBASE ---
-    const firebaseConfig = {
-        databaseURL: "https://firebaseio.com"
-    };
+    // CONFIGURACIÓN FIREBASE (Cámbiala por la tuya si no es esta)
+    const firebaseConfig = { databaseURL: "https://firebaseio.com" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // --- GRÁFICA ---
-    const ctx = document.getElementById('liveChart').getContext('2d');
-    const liveChart = new Chart(ctx, {
+    // GRÁFICA
+    const ctx = document.getElementById('aquariumChart').getContext('2d');
+    const myChart = new Chart(ctx, {
         type: 'line',
-        data: { labels: [], datasets: [{ label: 'Temp', data: [], borderColor: '#38bdf8', tension: 0.4 }] }
+        data: { labels: [], datasets: [{ label: 'Temp', data: [], borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 }] },
+        options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#1e2530' }, ticks: { color: '#8b949e' } }, x: { display: false } } }
     });
 
-    // --- ESCUCHAR DATOS (LA CLAVE) ---
-    db.ref('monitoreo').on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            document.getElementById('txt-temp').innerText = data.temp + "°C";
-            document.getElementById('txt-ph').innerText = data.ph;
-            document.getElementById('txt-tds').innerText = data.tds + " ppm";
-            document.getElementById('status-text').innerText = "● SISTEMA ONLINE";
+    // ESCUCHAR FIREBASE
+    db.ref('monitoreo').on('value', (snap) => {
+        const d = snap.val();
+        if (d) {
+            document.getElementById('val-temp').innerText = d.temp.toFixed(1) + "°C";
+            document.getElementById('val-ph').innerText = d.ph.toFixed(1);
+            document.getElementById('val-tds').innerText = d.tds + " ppm";
+            
+            // Lógica de alerta automática
+            document.getElementById('alert-zone').style.display = (d.temp > 28) ? 'flex' : 'none';
 
-            // Gráfica
-            const time = new Date().toLocaleTimeString();
-            if(liveChart.data.labels.length > 10) { liveChart.data.labels.shift(); liveChart.data.datasets[0].data.shift(); }
-            liveChart.data.labels.push(time);
-            liveChart.data.datasets[0].data.push(data.temp);
-            liveChart.update();
+            // Actualizar Gráfica
+            const now = new Date().toLocaleTimeString();
+            if (myChart.data.labels.length > 15) { myChart.data.labels.shift(); myChart.data.datasets[0].data.shift(); }
+            myChart.data.labels.push(now);
+            myChart.data.datasets[0].data.push(d.temp);
+            myChart.update();
         }
-    }, (error) => {
-        document.getElementById('status-text').innerText = "● Error: " + error.message;
     });
 </script>
 </body>
 </html>
 
-</html>
