@@ -145,9 +145,29 @@
             myChart.data.labels.push(now);
             myChart.data.datasets[0].data.push(d.temp);
             myChart.update();
+            // Este código busca la carpeta 'monitoreo' en Firebase
+    db.ref('monitoreo').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            // 1. Actualizar los números en las tarjetas
+            if (data.temp) document.getElementById('val-temp').innerText = data.temp.toFixed(1) + "°C";
+            if (data.ph) document.getElementById('val-ph').innerText = data.ph.toFixed(1);
+            if (data.tds) document.getElementById('val-tds').innerText = data.tds + " ppm";
+            
+            // 2. Hacer que la gráfica se mueva
+            const ahora = new Date().toLocaleTimeString();
+            myChart.data.labels.push(ahora);
+            myChart.data.datasets[0].data.push(data.temp); // Agregamos el [0] para seguridad
+
+            if (myChart.data.labels.length > 10) {
+                myChart.data.labels.shift();
+                myChart.data.datasets[0].data.shift();
+            }
+            myChart.update();
         }
     });
 </script>
 </body>
 </html>
+    
 
