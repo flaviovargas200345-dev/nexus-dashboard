@@ -3,104 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Aquarium Pro - Dashboard</title>
-    <!-- Librerías: Firebase, Chart.js e Iconos -->
+    <title>Nexus Aquarium Pro</title>
+    <!-- Librerías de Iconos y Gráficas -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script src="https://jsdelivr.net"></script>
     <link href="https://cloudflare.com" rel="stylesheet">
     <style>
-        :root { --bg-deep: #07090d; --sidebar-bg: #0f131a; --card-bg: #141a23; --accent-blue: #3b82f6; --text-muted: #8b949e; --alert-red: #ef4444; }
-        body { background-color: var(--bg-deep); color: #f0f6fc; font-family: 'Inter', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        :root { --bg-black: #07090d; --sidebar: #0d1117; --card: #161b22; --accent: #2f81f7; --text: #f0f6fc; }
+        body { background: var(--bg-black); color: var(--text); font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Sidebar */
-        .sidebar { width: 220px; background: var(--sidebar-bg); padding: 20px; display: flex; flex-direction: column; border-right: 1px solid #1e2530; }
-        .sidebar-logo { display: flex; align-items: center; gap: 10px; font-weight: bold; margin-bottom: 40px; color: var(--accent-blue); }
-        .nav-link { display: flex; align-items: center; gap: 12px; color: var(--text-muted); text-decoration: none; padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 5px; }
-        .nav-link.active { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        /* Sidebar Estilizada */
+        .sidebar { width: 220px; background: var(--sidebar); border-right: 1px solid #30363d; padding: 25px; display: flex; flex-direction: column; }
+        .logo { font-weight: bold; font-size: 1.2rem; color: #fff; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        .nav-link { color: #8b949e; text-decoration: none; padding: 12px; border-radius: 8px; margin-bottom: 5px; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; }
+        .nav-link.active { background: #1f2937; color: var(--accent); }
 
-        /* Main Content */
-        .main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-        .header { background: var(--sidebar-bg); padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e2530; }
-        .content { padding: 25px 40px; }
+        /* Contenedor Principal */
+        .main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        .header { padding: 15px 35px; border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; background: var(--sidebar); }
+        .content { padding: 30px; }
 
-        /* Stats Cards */
-        .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 15px; display: flex; flex-direction: column; position: relative; border: 1px solid #1e2530; }
-        .stat-card h3 { font-size: 0.65rem; color: var(--text-muted); margin: 0; text-transform: uppercase; }
-        .stat-card .value { font-size: 1.5rem; font-weight: bold; margin: 8px 0; color: #fff; }
-        .stat-card .trend { font-size: 0.75rem; color: #10b981; display: flex; align-items: center; gap: 4px; }
-        .stat-icon { position: absolute; top: 20px; right: 20px; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        /* Tarjetas con Círculos de Colores */
+        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: var(--card); padding: 22px; border-radius: 16px; border: 1px solid #30363d; position: relative; }
+        .stat-card h3 { font-size: 0.7rem; color: #8b949e; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .val { font-size: 1.6rem; font-weight: bold; margin: 10px 0; }
+        .stat-card .trend { font-size: 0.75rem; font-weight: 500; }
+        
+        /* Iconos Circulares (Lo que faltaba) */
+        .icon-circle { position: absolute; top: 15px; right: 15px; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
 
-        /* Chart & Side Panel */
-        .dashboard-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 20px; }
-        .chart-box { background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid #1e2530; }
-        .health-box { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid #1e2530; margin-bottom: 20px; }
-        .service-box { background: linear-gradient(135deg, #2563eb, #1e40af); padding: 25px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px; }
+        /* Bloques Inferiores */
+        .dashboard-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .chart-container { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #30363d; }
+        .health-card { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid #30363d; margin-bottom: 20px; }
+        .service-blue { background: #2563eb; padding: 25px; border-radius: 20px; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3); }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <div class="sidebar-logo"><i class="fas fa-cube"></i> Nexus Aquarium</div>
+    <div class="logo"><i class="fas fa-cube" style="color:var(--accent)"></i> Nexus Aquarium</div>
     <a href="#" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</a>
-    <a href="#" class="nav-link"><i class="fas fa-bell"></i> Alerts <span style="background:var(--alert-red); color:white; border-radius:50%; width:18px; height:18px; text-align:center; font-size:0.6rem; margin-left:auto; line-height:18px;">1</span></a>
+    <a href="#" class="nav-link"><i class="fas fa-bell"></i> Alerts</a>
     <a href="#" class="nav-link"><i class="fas fa-history"></i> History</a>
-    <a href="#" class="nav-link"><i class="fas fa-file-alt"></i> Reports</a>
-    <a href="#" class="nav-link" style="margin-top:auto"><i class="fas fa-cog"></i> Settings</a>
+    <a href="#" class="nav-link"><i class="fas fa-cog" style="margin-top: auto;"></i> Settings</a>
 </div>
 
 <div class="main">
     <header class="header">
-        <div style="font-size: 0.8rem; background:#1e2530; padding:6px 12px; border-radius:6px; cursor:pointer;">Reef Tank #1 <i class="fas fa-chevron-down" style="margin-left:8px"></i></div>
+        <div style="font-size: 0.8rem; background:#21262d; padding:6px 12px; border-radius:6px;">Reef Tank #1 <i class="fas fa-chevron-down"></i></div>
         <div style="display:flex; align-items:center; gap:20px;">
-            <i class="fas fa-search" style="color:var(--text-muted)"></i>
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:0.8rem">Nexus Admin</span>
-                <div style="background:var(--accent-blue); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:black; font-size:0.8rem">N</div>
-            </div>
+            <div style="font-size:0.85rem">Nexus Admin</div>
+            <div style="background:var(--accent); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#000">N</div>
         </div>
     </header>
 
     <div class="content">
-        <div class="stats-row">
+        <div class="stats-grid">
+            <!-- Temperatura -->
             <div class="stat-card">
-                <h3>TEMP</h3><div class="value" id="val-temp">--°C</div><div class="trend"><i class="fas fa-arrow-up"></i> 1.2%</div>
-                <div class="stat-icon" style="background:rgba(59,130,246,0.1); color:#3b82f6"><i class="fas fa-thermometer-half"></i></div>
+                <h3>Temp</h3>
+                <div class="val" id="v-temp">--°C</div>
+                <div class="trend" style="color:#3fb950">↑ 1.2%</div>
+                <div class="icon-circle" style="background:rgba(47,129,247,0.15); color:var(--accent)"><i class="fas fa-thermometer-half"></i></div>
             </div>
+            <!-- pH -->
             <div class="stat-card">
-                <h3>PH</h3><div class="value" id="val-ph">--</div><div class="trend"><i class="fas fa-arrow-up"></i> 0.3%</div>
-                <div class="stat-icon" style="background:rgba(16,185,129,0.1); color:#10b981"><i class="fas fa-flask"></i></div>
+                <h3>pH</h3>
+                <div class="val" id="v-ph">--</div>
+                <div class="trend" style="color:#3fb950">↑ 0.3%</div>
+                <div class="icon-circle" style="background:rgba(63,185,80,0.15); color:#3fb950"><i class="fas fa-flask"></i></div>
             </div>
+            <!-- TDS -->
             <div class="stat-card">
-                <h3>TDS</h3><div class="value" id="val-tds">--</div><div class="trend" style="color:var(--alert-red)"><i class="fas fa-arrow-up"></i> 5.4%</div>
-                <div class="stat-icon" style="background:rgba(168,85,247,0.1); color:#a855f7"><i class="fas fa-vial"></i></div>
+                <h3>TDS</h3>
+                <div class="val" id="v-tds">--</div>
+                <div class="trend" style="color:#f85149">↑ 5.4%</div>
+                <div class="icon-circle" style="background:rgba(168,85,247,0.15); color:#a855f7"><i class="fas fa-vial"></i></div>
             </div>
+            <!-- Turbidez -->
             <div class="stat-card">
-                <h3>TURBIDEZ</h3><div class="value">28 <small style="font-size:0.6rem">NTU</small></div><div class="trend" style="color:var(--text-muted)">Estable</div>
-                <div class="stat-icon" style="background:rgba(251,191,36,0.1); color:#fbbf24"><i class="fas fa-tint"></i></div>
+                <h3>Turbidez</h3>
+                <div class="val">28 <small style="font-size:0.6rem">NTU</small></div>
+                <div class="trend" style="color:#8b949e">Estable</div>
+                <div class="icon-circle" style="background:rgba(210,153,34,0.15); color:#d29922"><i class="fas fa-tint"></i></div>
             </div>
+            <!-- Oxígeno -->
             <div class="stat-card">
-                <h3>OXIGENO</h3><div class="value">7.5 <small style="font-size:0.6rem">mg/L</small></div><div class="trend"><i class="fas fa-arrow-up"></i> 1.1%</div>
-                <div class="stat-icon" style="background:rgba(59,130,246,0.1); color:#3b82f6"><i class="fas fa-wind"></i></div>
+                <h3>Oxígeno</h3>
+                <div class="val">7.5 <small style="font-size:0.6rem">mg/L</small></div>
+                <div class="trend" style="color:#3fb950">↑ 1.1%</div>
+                <div class="icon-circle" style="background:rgba(47,129,247,0.15); color:var(--accent)"><i class="fas fa-wind"></i></div>
             </div>
         </div>
 
-        <div class="dashboard-grid">
-            <div class="chart-box">
-                <h4 style="margin:0 0 20px 0; color:var(--text-muted); font-size:0.8rem">Live Parameter Tracking</h4>
-                <canvas id="liveChart" height="150"></canvas>
+        <div class="dashboard-layout">
+            <div class="chart-container">
+                <h4 style="margin:0 0 20px 0; color:#8b949e; font-size:0.8rem">Live Parameter Tracking</h4>
+                <canvas id="mainChart" height="130"></canvas>
             </div>
-            <div>
-                <div class="health-box">
-                    <h4 style="margin:0 0 15px 0; font-size:0.9rem">System Health <span style="float:right; color:#10b981; font-size:0.6rem" id="status-tag">● Online</span></h4>
-                    <p style="font-size:0.75rem; color:var(--text-muted); margin:5px 0">WiFi Signal: <span style="color:#10b981">Excellent (98%)</span></p>
-                    <p style="font-size:0.75rem; color:var(--text-muted); margin:5px 0">Last Sync: <span id="sync-time">Just now</span></p>
+            <div class="side-panel">
+                <div class="health-card">
+                    <h4 style="margin:0 0 15px 0; font-size:0.9rem">System Health <span style="float:right; color:#3fb950; font-size:0.6rem">● Online</span></h4>
+                    <p style="font-size:0.75rem; color:#8b949e; margin:5px 0">WiFi Signal: <span style="color:#3fb950">Excellent (98%)</span></p>
+                    <p style="font-size:0.75rem; color:#8b949e; margin:5px 0">Last Sync: Just now</p>
                 </div>
-                <div class="service-box">
-                    <span style="font-size:0.65rem; opacity:0.8; letter-spacing:1px">NEXT SERVICE</span>
+                <div class="service-blue">
+                    <div style="font-size:0.6rem; opacity:0.8; letter-spacing:1px; margin-bottom:5px">NEXT SERVICE</div>
                     <div style="font-size:1.8rem; font-weight:bold">4 Days <small style="font-size:0.7rem; font-weight:normal">REMAINING</small></div>
-                    <p style="font-size:0.7rem; margin:0; opacity:0.9">Filter Replacement & Skimmer Cleaning</p>
+                    <p style="font-size:0.75rem; margin:10px 0 0 0; opacity:0.9">Filter Replacement & Skimmer Cleaning</p>
                 </div>
             </div>
         </div>
@@ -108,49 +121,35 @@
 </div>
 
 <script>
-    // 1. CONFIGURACIÓN FIREBASE (CUIDADO: Verifica que sea exactamente tu URL)
+    // --- CONFIGURACIÓN FIREBASE (Copia exactamente tu URL) ---
     const firebaseConfig = { databaseURL: "https://acuario-3ea31-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 2. CONFIGURACIÓN GRÁFICA
-    const ctx = document.getElementById('liveChart').getContext('2d');
+    // --- GRÁFICA ---
+    const ctx = document.getElementById('mainChart').getContext('2d');
     const myChart = new Chart(ctx, {
         type: 'line',
-        data: { labels: [], datasets: [{ label: 'Temp', data: [], borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 }] },
-        options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#1e2530' }, ticks: { color: '#8b949e' } }, x: { display: false } } }
+        data: { labels: [], datasets: [{ label: 'Temp', data: [], borderColor: '#2f81f7', backgroundColor: 'rgba(47, 129, 247, 0.1)', fill: true, tension: 0.4 }] },
+        options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#30363d' }, ticks: { color: '#8b949e' } }, x: { display: false } } }
     });
 
-    // 3. ESCUCHAR FIREBASE (La carpeta debe llamarse 'monitoreo' exactamente)
+    // --- LECTURA REAL ---
     db.ref('monitoreo').on('value', (snapshot) => {
         const data = snapshot.val();
-        console.log("Datos recibidos:", data); // Esto nos ayuda a depurar en la consola (F12)
-
         if (data) {
-            // Actualizar tarjetas
-            if (data.temp !== undefined) document.getElementById('val-temp').innerText = data.temp.toFixed(1) + "°C";
-            if (data.ph !== undefined) document.getElementById('val-ph').innerText = data.ph.toFixed(1);
-            if (data.tds !== undefined) document.getElementById('val-tds').innerText = data.tds + " ppm";
+            document.getElementById('v-temp').innerText = (data.temp || 0).toFixed(1) + "°C";
+            document.getElementById('v-ph').innerText = (data.ph || 0).toFixed(1);
+            document.getElementById('v-tds').innerText = (data.tds || 0) + " ppm";
             
-            // Actualizar gráfica
-            const ahora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            if (myChart.data.labels.length > 15) { myChart.data.labels.shift(); myChart.data.datasets[0].data.shift(); }
-            myChart.data.labels.push(ahora);
-            myChart.data.datasets[0].data.push(data.temp);
+            const now = new Date().toLocaleTimeString();
+            if (myChart.data.labels.length > 15) { myChart.data.labels.shift(); myChart.data.datasets.data.shift(); }
+            myChart.data.labels.push(now);
+            myChart.data.datasets.data.push(data.temp);
             myChart.update();
-
-            document.getElementById('sync-time').innerText = new Date().toLocaleTimeString();
-            document.getElementById('status-tag').innerText = "● Online";
-            document.getElementById('status-tag').style.color = "#10b981";
         }
-    }, (error) => {
-        console.error("Error de Firebase:", error);
-        document.getElementById('status-tag').innerText = "● Offline";
-        document.getElementById('status-tag').style.color = "#ef4444";
     });
 </script>
 </body>
 </html>
-
-    
 
