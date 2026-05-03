@@ -3,28 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Aquarium - Dashboard</title>
-    <!-- Librerías: Firebase y Chart.js para la gráfica -->
+    <title>Nexus Aquarium - Dashboard Profesional</title>
+    <!-- Librerías: Firebase y Chart.js -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script src="https://jsdelivr.net"></script>
     <link href="https://cloudflare.com" rel="stylesheet">
     <style>
         :root { --bg-color: #0b0e14; --card-bg: #161b22; --text-main: #f0f6fc; --accent: #38bdf8; --alert: #ef4444; }
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
         header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid #30363d; }
-        .alert-banner { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--alert); color: var(--alert); padding: 10px; border-radius: 8px; margin: 20px 0; display: none; font-size: 0.9rem; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #30363d; text-align: left; position: relative; }
-        .stat-card i { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: var(--accent); opacity: 0.5; }
+        .alert-banner { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--alert); color: var(--alert); padding: 15px; border-radius: 8px; margin: 20px 0; display: none; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #30363d; position: relative; }
+        .stat-card i { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: var(--accent); opacity: 0.3; }
         .stat-card h3 { font-size: 0.75rem; color: #8b949e; margin: 0; text-transform: uppercase; }
-        .stat-card .val { font-size: 1.8rem; font-weight: bold; margin: 10px 0; }
-        .stat-card .trend { font-size: 0.8rem; color: #3fb950; }
+        .val { font-size: 2rem; font-weight: bold; margin: 10px 0; }
         .main-content { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
         .chart-container { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #30363d; }
-        .side-panel { display: flex; flex-direction: column; gap: 20px; }
-        .side-card { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #30363d; }
+        .side-card { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #30363d; margin-bottom: 20px; }
         .status-dot { height: 10px; width: 10px; background-color: #3fb950; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        @media (max-width: 768px) { .main-content { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -38,71 +37,67 @@
 </header>
 
 <div class="alert-banner" id="alert-msg">
-    <i class="fas fa-exclamation-triangle"></i> ALERTA: Parámetros fuera de rango seguro. Revise el sistema de inmediato.
+    <i class="fas fa-exclamation-triangle"></i> <strong>ALERTA:</strong> Temperatura fuera de rango seguro (>28°C).
 </div>
 
 <div class="stats-grid">
     <div class="stat-card">
-        <h3>TEMP</h3>
+        <h3>Temperatura</h3>
         <div class="val" id="txt-temp">--°C</div>
-        <div class="trend"><i class="fas fa-arrow-up"></i> 1.2%</div>
         <i class="fas fa-thermometer-half"></i>
     </div>
     <div class="stat-card">
-        <h3>PH</h3>
+        <h3>PH Agua</h3>
         <div class="val" id="txt-ph">--</div>
-        <div class="trend"><i class="fas fa-arrow-up"></i> 0.3%</div>
         <i class="fas fa-flask"></i>
     </div>
     <div class="stat-card">
-        <h3>TDS</h3>
+        <h3>Sólidos (TDS)</h3>
         <div class="val" id="txt-tds">-- ppm</div>
-        <div class="trend" style="color: var(--alert);"><i class="fas fa-arrow-up"></i> 5.4%</div>
         <i class="fas fa-vial"></i>
     </div>
     <div class="stat-card">
-        <h3>TURBIDEZ</h3>
-        <div class="val">28 <small>NTU</small></div>
-        <div class="trend">Estable</div>
-        <i class="fas fa-sun"></i>
+        <h3>Turbidez</h3>
+        <div class="val">28 <small style="font-size: 0.8rem;">NTU</small></div>
+        <i class="fas fa-water"></i>
     </div>
 </div>
 
 <div class="main-content">
     <div class="chart-container">
-        <h3 style="margin-top: 0; font-size: 0.9rem; color: #8b949e;">Live Parameter Tracking</h3>
+        <h3 style="margin-top: 0; font-size: 0.9rem; color: #8b949e;">Live Parameter Tracking (Temperatura)</h3>
         <canvas id="liveChart" height="150"></canvas>
     </div>
     <div class="side-panel">
         <div class="side-card">
-            <h3 style="margin-top: 0; font-size: 0.9rem;">System Health</h3>
-            <p style="font-size: 0.8rem; color: #8b949e;">WiFi Signal: <span style="color: #3fb950;">Excellent (98%)</span></p>
-            <p style="font-size: 0.8rem; color: #8b949e;">Last Sync: <span id="last-sync">Just now</span></p>
+            <h3 style="margin-top: 0; font-size: 0.9rem;">Estado del Sistema</h3>
+            <p style="font-size: 0.8rem; color: #8b949e;">Señal WiFi: <span style="color: #3fb950;">Excelente (98%)</span></p>
+            <p style="font-size: 0.8rem; color: #8b949e;">Última Sincronización: <span id="last-sync">Conectando...</span></p>
         </div>
         <div class="side-card" style="background: linear-gradient(135deg, #1d4ed8, #1e40af); border: none;">
-            <h3 style="margin: 0; font-size: 0.9rem;">Próximo Servicio</h3>
-            <p style="font-size: 1.5rem; font-weight: bold; margin: 10px 0;">4 Días</p>
-            <p style="font-size: 0.7rem; opacity: 0.8;">Limpieza de Filtro & Skimmer</p>
+            <h3 style="margin: 0; font-size: 0.9rem; color: white;">Próximo Servicio</h3>
+            <p style="font-size: 1.5rem; font-weight: bold; margin: 10px 0; color: white;">4 Días</p>
+            <p style="font-size: 0.7rem; opacity: 0.9; color: white;">Limpieza de Filtro & Skimmer</p>
         </div>
     </div>
 </div>
 
 <script>
-    // --- CONFIGURACIÓN FIREBASE ---
+    // 1. CONFIGURACIÓN FIREBASE (URL de tu proyecto)
     const firebaseConfig = {
-        databaseURL: "https://acuario-3ea31-default-rtdb.firebaseio.com/" 
+        databaseURL: "https://firebaseio.com"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // --- CONFIGURACIÓN GRÁFICA ---
+    // 2. CONFIGURACIÓN GRÁFICA (Chart.js)
     const ctx = document.getElementById('liveChart').getContext('2d');
     const liveChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: [],
             datasets: [{
-                label: 'Temperatura (°C)',
+                label: 'Temp °C',
                 data: [],
                 borderColor: '#38bdf8',
                 backgroundColor: 'rgba(56, 189, 248, 0.1)',
@@ -120,29 +115,39 @@
         }
     });
 
-    // --- ESCUCHAR DATOS ---
+    // 3. ESCUCHAR DATOS EN TIEMPO REAL
     db.ref('monitoreo').on('value', (snapshot) => {
         const data = snapshot.val();
-        if (data) {
-            document.getElementById('txt-temp').innerText = data.temp.toFixed(1) + "°C";
-            document.getElementById('txt-ph').innerText = data.ph.toFixed(1);
-            document.getElementById('txt-tds').innerText = data.tds + " ppm";
-            
-            // Alerta si la temp es muy alta
-            document.getElementById('alert-msg').style.display = data.temp > 28 ? 'block' : 'none';
+        console.log("Datos recibidos:", data);
 
-            // Actualizar Gráfica
-            const now = new Date().toLocaleTimeString();
-            if (liveChart.data.labels.length > 10) {
-                liveChart.data.labels.shift();
-                liveChart.data.datasets[0].data.shift();
+        if (data) {
+            // Actualizar textos (asegúrate que en Firebase se llamen: temp, ph, tds)
+            if (data.temp !== undefined) {
+                document.getElementById('txt-temp').innerText = data.temp.toFixed(1) + "°C";
+                // Alerta si temp > 28
+                document.getElementById('alert-msg').style.display = data.temp > 28 ? 'block' : 'none';
+                
+                // Actualizar Gráfica
+                const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                if (liveChart.data.labels.length > 15) {
+                    liveChart.data.labels.shift();
+                    liveChart.data.datasets[0].data.shift();
+                }
+                liveChart.data.labels.push(now);
+                liveChart.data.datasets[0].data.push(data.temp);
+                liveChart.update();
             }
-            liveChart.data.labels.push(now);
-            liveChart.data.datasets[0].data.push(data.temp);
-            liveChart.update();
             
-            document.getElementById('last-sync').innerText = "Hace un momento";
+            if (data.ph !== undefined) document.getElementById('txt-ph').innerText = data.ph.toFixed(1);
+            if (data.tds !== undefined) document.getElementById('txt-tds').innerText = data.tds + " ppm";
+            
+            document.getElementById('last-sync').innerText = new Date().toLocaleTimeString();
+        } else {
+            console.log("No se encontraron datos en la ruta 'monitoreo'");
         }
+    }, (error) => {
+        console.error("Error de Firebase:", error);
+        document.getElementById('connection-status').innerText = "Error de Conexión";
     });
 </script>
 
