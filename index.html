@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Aquarium - Dashboard Pro</title>
+    <title>Nexus Aquarium Pro - Dashboard</title>
+    <!-- Librerías: Firebase, Chart.js e Iconos -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script src="https://jsdelivr.net"></script>
@@ -14,40 +15,36 @@
         
         /* Sidebar */
         .sidebar { width: 220px; background: var(--sidebar-bg); padding: 20px; display: flex; flex-direction: column; border-right: 1px solid #1e2530; }
-        .sidebar-logo { display: flex; align-items: center; gap: 10px; font-weight: bold; margin-bottom: 40px; }
+        .sidebar-logo { display: flex; align-items: center; gap: 10px; font-weight: bold; margin-bottom: 40px; color: var(--accent-blue); }
         .nav-link { display: flex; align-items: center; gap: 12px; color: var(--text-muted); text-decoration: none; padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 5px; }
         .nav-link.active { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
-        .nav-link:hover { color: white; }
 
-        /* Main */
+        /* Main Content */
         .main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
         .header { background: var(--sidebar-bg); padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e2530; }
-        .content { padding: 20px 40px; }
+        .content { padding: 25px 40px; }
 
-        /* Banner Alerta */
-        .alert-bar { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--alert-red); color: var(--alert-red); padding: 12px 20px; border-radius: 10px; margin-bottom: 25px; display: none; align-items: center; gap: 15px; font-size: 0.85rem; }
-
-        /* Tarjetas Estilo Nexus */
+        /* Stats Cards */
         .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 15px; display: flex; flex-direction: column; position: relative; }
+        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 15px; display: flex; flex-direction: column; position: relative; border: 1px solid #1e2530; }
         .stat-card h3 { font-size: 0.65rem; color: var(--text-muted); margin: 0; text-transform: uppercase; }
-        .stat-card .value { font-size: 1.4rem; font-weight: bold; margin: 8px 0; }
+        .stat-card .value { font-size: 1.5rem; font-weight: bold; margin: 8px 0; color: #fff; }
         .stat-card .trend { font-size: 0.75rem; color: #10b981; display: flex; align-items: center; gap: 4px; }
-        .stat-icon { position: absolute; top: 15px; right: 15px; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .stat-icon { position: absolute; top: 20px; right: 20px; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-        /* Gráfica y Panel Lateral */
+        /* Chart & Side Panel */
         .dashboard-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 20px; }
-        .chart-box { background: var(--card-bg); padding: 25px; border-radius: 20px; }
-        .health-box { background: var(--card-bg); padding: 20px; border-radius: 20px; margin-bottom: 20px; }
-        .service-box { background: #2563eb; padding: 25px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .chart-box { background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid #1e2530; }
+        .health-box { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid #1e2530; margin-bottom: 20px; }
+        .service-box { background: linear-gradient(135deg, #2563eb, #1e40af); padding: 25px; border-radius: 20px; display: flex; flex-direction: column; gap: 10px; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <div class="sidebar-logo"><i class="fas fa-cube" style="color:#3b82f6"></i> Nexus Aquarium</div>
+    <div class="sidebar-logo"><i class="fas fa-cube"></i> Nexus Aquarium</div>
     <a href="#" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</a>
-    <a href="#" class="nav-link"><i class="fas fa-bell"></i> Alerts <span style="background:var(--alert-red); color:white; border-radius:50%; width:18px; height:18px; text-align:center; font-size:0.7rem; margin-left:auto">1</span></a>
+    <a href="#" class="nav-link"><i class="fas fa-bell"></i> Alerts <span style="background:var(--alert-red); color:white; border-radius:50%; width:18px; height:18px; text-align:center; font-size:0.6rem; margin-left:auto; line-height:18px;">1</span></a>
     <a href="#" class="nav-link"><i class="fas fa-history"></i> History</a>
     <a href="#" class="nav-link"><i class="fas fa-file-alt"></i> Reports</a>
     <a href="#" class="nav-link" style="margin-top:auto"><i class="fas fa-cog"></i> Settings</a>
@@ -55,21 +52,17 @@
 
 <div class="main">
     <header class="header">
-        <div style="font-size: 0.8rem; background:#1e2530; padding:6px 12px; border-radius:6px;">Reef Tank #1 <i class="fas fa-chevron-down" style="margin-left:8px"></i></div>
+        <div style="font-size: 0.8rem; background:#1e2530; padding:6px 12px; border-radius:6px; cursor:pointer;">Reef Tank #1 <i class="fas fa-chevron-down" style="margin-left:8px"></i></div>
         <div style="display:flex; align-items:center; gap:20px;">
             <i class="fas fa-search" style="color:var(--text-muted)"></i>
             <div style="display:flex; align-items:center; gap:10px;">
                 <span style="font-size:0.8rem">Nexus Admin</span>
-                <div style="background:var(--accent-blue); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:black">N</div>
+                <div style="background:var(--accent-blue); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:black; font-size:0.8rem">N</div>
             </div>
         </div>
     </header>
 
     <div class="content">
-        <div class="alert-bar" id="alert-zone">
-            <i class="fas fa-exclamation-triangle"></i> <strong>ALERTA:</strong> Parámetros fuera de rango seguro. Revise el sistema de inmediato.
-        </div>
-
         <div class="stats-row">
             <div class="stat-card">
                 <h3>TEMP</h3><div class="value" id="val-temp">--°C</div><div class="trend"><i class="fas fa-arrow-up"></i> 1.2%</div>
@@ -96,18 +89,18 @@
         <div class="dashboard-grid">
             <div class="chart-box">
                 <h4 style="margin:0 0 20px 0; color:var(--text-muted); font-size:0.8rem">Live Parameter Tracking</h4>
-                <canvas id="aquariumChart" height="150"></canvas>
+                <canvas id="liveChart" height="150"></canvas>
             </div>
             <div>
                 <div class="health-box">
-                    <h4 style="margin:0 0 15px 0; font-size:0.9rem">System Health <span style="float:right; color:#10b981; font-size:0.6rem">● Online</span></h4>
+                    <h4 style="margin:0 0 15px 0; font-size:0.9rem">System Health <span style="float:right; color:#10b981; font-size:0.6rem" id="status-tag">● Online</span></h4>
                     <p style="font-size:0.75rem; color:var(--text-muted); margin:5px 0">WiFi Signal: <span style="color:#10b981">Excellent (98%)</span></p>
-                    <p style="font-size:0.75rem; color:var(--text-muted); margin:5px 0">Last Sync: Just now</p>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin:5px 0">Last Sync: <span id="sync-time">Just now</span></p>
                 </div>
                 <div class="service-box">
-                    <span style="font-size:0.7rem; opacity:0.8">NEXT SERVICE</span>
+                    <span style="font-size:0.65rem; opacity:0.8; letter-spacing:1px">NEXT SERVICE</span>
                     <div style="font-size:1.8rem; font-weight:bold">4 Days <small style="font-size:0.7rem; font-weight:normal">REMAINING</small></div>
-                    <p style="font-size:0.7rem; margin:0">Filter Replacement & Skimmer Cleaning</p>
+                    <p style="font-size:0.7rem; margin:0; opacity:0.9">Filter Replacement & Skimmer Cleaning</p>
                 </div>
             </div>
         </div>
@@ -115,59 +108,49 @@
 </div>
 
 <script>
-    // CONFIGURACIÓN FIREBASE
-    const firebaseConfig = { databaseURL: "https://acuario-3ea31-default-rtdb.firebaseio.com/ };
+    // 1. CONFIGURACIÓN FIREBASE (CUIDADO: Verifica que sea exactamente tu URL)
+    const firebaseConfig = { databaseURL: "https://acuario-3ea31-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // GRÁFICA
-    const ctx = document.getElementById('aquariumChart').getContext('2d');
+    // 2. CONFIGURACIÓN GRÁFICA
+    const ctx = document.getElementById('liveChart').getContext('2d');
     const myChart = new Chart(ctx, {
         type: 'line',
         data: { labels: [], datasets: [{ label: 'Temp', data: [], borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 }] },
         options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#1e2530' }, ticks: { color: '#8b949e' } }, x: { display: false } } }
     });
 
-    // ESCUCHAR FIREBASE
-    db.ref('monitoreo').on('value', (snap) => {
-        const d = snap.val();
-        if (d) {
-            document.getElementById('val-temp').innerText = d.temp.toFixed(1) + "°C";
-            document.getElementById('val-ph').innerText = d.ph.toFixed(1);
-            document.getElementById('val-tds').innerText = d.tds + " ppm";
-            
-            // Lógica de alerta automática
-            document.getElementById('alert-zone').style.display = (d.temp > 28) ? 'flex' : 'none';
-
-            // Actualizar Gráfica
-            const now = new Date().toLocaleTimeString();
-            if (myChart.data.labels.length > 15) { myChart.data.labels.shift(); myChart.data.datasets[0].data.shift(); }
-            myChart.data.labels.push(now);
-            myChart.data.datasets[0].data.push(d.temp);
-            myChart.update();
-            // Este código busca la carpeta 'monitoreo' en Firebase
+    // 3. ESCUCHAR FIREBASE (La carpeta debe llamarse 'monitoreo' exactamente)
     db.ref('monitoreo').on('value', (snapshot) => {
         const data = snapshot.val();
-        if (data) {
-            // 1. Actualizar los números en las tarjetas
-            if (data.temp) document.getElementById('val-temp').innerText = data.temp.toFixed(1) + "°C";
-            if (data.ph) document.getElementById('val-ph').innerText = data.ph.toFixed(1);
-            if (data.tds) document.getElementById('val-tds').innerText = data.tds + " ppm";
-            
-            // 2. Hacer que la gráfica se mueva
-            const ahora = new Date().toLocaleTimeString();
-            myChart.data.labels.push(ahora);
-            myChart.data.datasets[0].data.push(data.temp); // Agregamos el [0] para seguridad
+        console.log("Datos recibidos:", data); // Esto nos ayuda a depurar en la consola (F12)
 
-            if (myChart.data.labels.length > 10) {
-                myChart.data.labels.shift();
-                myChart.data.datasets[0].data.shift();
-            }
+        if (data) {
+            // Actualizar tarjetas
+            if (data.temp !== undefined) document.getElementById('val-temp').innerText = data.temp.toFixed(1) + "°C";
+            if (data.ph !== undefined) document.getElementById('val-ph').innerText = data.ph.toFixed(1);
+            if (data.tds !== undefined) document.getElementById('val-tds').innerText = data.tds + " ppm";
+            
+            // Actualizar gráfica
+            const ahora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            if (myChart.data.labels.length > 15) { myChart.data.labels.shift(); myChart.data.datasets[0].data.shift(); }
+            myChart.data.labels.push(ahora);
+            myChart.data.datasets[0].data.push(data.temp);
             myChart.update();
+
+            document.getElementById('sync-time').innerText = new Date().toLocaleTimeString();
+            document.getElementById('status-tag').innerText = "● Online";
+            document.getElementById('status-tag').style.color = "#10b981";
         }
+    }, (error) => {
+        console.error("Error de Firebase:", error);
+        document.getElementById('status-tag').innerText = "● Offline";
+        document.getElementById('status-tag').style.color = "#ef4444";
     });
 </script>
 </body>
 </html>
+
     
 
